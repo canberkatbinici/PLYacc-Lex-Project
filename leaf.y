@@ -92,3 +92,102 @@ expr:
 %%
 
 
+nodeType *con(int value) {
+    nodeType *p;
+
+
+    if ((p = malloc(sizeof(nodeType))) == NULL)
+        yyerror("out of memory");
+
+
+    p->type = typeCon;
+    p->con.value = value;
+
+    return p;
+}
+
+nodeType *id(int i) {
+    nodeType *p;
+
+
+    if ((p = malloc(sizeof(nodeType))) == NULL)
+        yyerror("out of memory");
+
+
+    p->type = typeId;
+    p->id.i = i;
+
+    return p;
+}
+
+nodeType *opr(int oper, int nops, ...) {
+    va_list ap;
+    nodeType *p;
+    int i;
+
+
+    if ((p = malloc(sizeof(nodeType) + (nops-1) * sizeof(nodeType *))) == NULL)
+        yyerror("out of memory");
+
+
+    p->type = typeOpr;
+    p->opr.oper = oper;
+    p->opr.nops = nops;
+    va_start(ap, nops);
+    for (i = 0; i < nops; i++)
+        p->opr.op[i] = va_arg(ap, nodeType*);
+    va_end(ap);
+    return p;
+}
+
+void freeNode(nodeType *p) {
+    int i;
+
+    if (!p) return;
+    if (p->type == typeOpr) {
+        for (i = 0; i < p->opr.nops; i++)
+            freeNode(p->opr.op[i]);
+    }
+    free (p);
+}
+
+void yyerror(char *s) {
+    fprintf(stdout, "%s\n", s);
+}
+
+int main(void) {
+    yyparse();
+    return 0;
+}
+
+int ex(nodeType *p) {
+    if (!p) return 0;
+    switch(p->type) {
+    case typeCon:       return p->con.value;
+    case typeId:        return sym[p->id.i];
+    case typeOpr:
+        switch(p->opr.oper) {
+        case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;
+        case IF:        if (ex(p->opr.op[0]))
+                            ex(p->opr.op[1]);
+                        else if (p->opr.nops > 2)
+                            ex(p->opr.op[2]);
+                        return 0;
+        case CONSOLPRINT:     printf("%d\n", ex(p->opr.op[0])); return 0;
+        case SEMICOLON:       ex(p->opr.op[0]); return ex(p->opr.op[1]);
+        case '=':       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+        case UMINUS:    return -ex(p->opr.op[0]);
+        case PLUS:       return ex(p->opr.op[0]) + ex(p->opr.op[1]);
+        case MINUS:       return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+        case MULTIPLE:       return ex(p->opr.op[0]) * ex(p->opr.op[1]);
+        case DIVIDE:       return ex(p->opr.op[0]) / ex(p->opr.op[1]);
+        case LESSTHAN:       return ex(p->opr.op[0]) < ex(p->opr.op[1]);
+        case GREATERTHAN:       return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+        case EQUALORGREAT:        return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
+        case EQUALORLESS:        return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
+        case ISNOTEQUAL:        return ex(p->opr.op[0]) != ex(p->opr.op[1]);
+        case EQUAL:        return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+        }
+    }
+    return 0;
+}

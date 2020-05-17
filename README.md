@@ -1,4 +1,4 @@
-# ProgrammingLanguage
+# PL-Yacc-Lex-Project
 
 CSE PL Homework
 
@@ -16,11 +16,11 @@ This is initially done for Programming Language homework in Akdeniz University C
 
 Our language is designed as  syntax of the algorithms in CAPSLOCK form. Our language is mainly under effect of Java language syntax.
 
- # Syntax
+ ## Syntax
 
-# Blocks and Commands
+### Blocks and Commands
 
-
+```
 < program >  ::= < stmt_list >
 
 
@@ -100,11 +100,12 @@ Our language is designed as  syntax of the algorithms in CAPSLOCK form. Our lang
 
 
 < assignment-statement > ::= < variable > = < expression > ;
+```
 
 
-# Expressions
+### Expressions
 
-
+```
 < expression > ::= < assignment expression > 
                   
                   | < relational expression >
@@ -144,10 +145,11 @@ Our language is designed as  syntax of the algorithms in CAPSLOCK form. Our lang
                       
                       | ><
 
+```
 
-# Tokens
+### Tokens
 
-
+```
 < letter > ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z"
 
 
@@ -168,13 +170,13 @@ Our language is designed as  syntax of the algorithms in CAPSLOCK form. Our lang
 
 < keyword > ::= WHITESPACE | TRUE | FALSE | BOOL | FUNCTION | ENDF | RETURN | IF | ELSE | ELF | DO | WHILE | LOOPW | FOR | LOOPF | TRY | CATCH | THEN | SWITCH | CASE | IMPORT | STOP | CONTINUE | PRINTLOG | SCANLOG | NL | STR | INT | DINT | FLOAT |  
 
+```
 
 
+## How to run ?
 
-# How to run ?
+- First, to build project run "make" command.
 
-Fist, to build project run "make" command.
+- Second, to run project run "make run" command. 
 
-Second, to run project run "make run" command. 
-
-Third, to clear builds run "make clear" command.
+- Third, to clear builds run "make clear" command.
